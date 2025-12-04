@@ -18,6 +18,8 @@ export interface Question {
     answer: number; // Index of the correct option (0-3)
     tags: string[];
     created_at: number;
+    explanation_en?: string;
+    explanation_hi?: string;
 }
 
 export interface User {

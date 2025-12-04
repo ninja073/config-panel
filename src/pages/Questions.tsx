@@ -25,7 +25,9 @@ const Questions: React.FC = () => {
         options_hi: ['', '', '', ''],
         answer: 0,
         tags: [],
-        created_at: Date.now()
+        created_at: Date.now(),
+        explanation_en: '',
+        explanation_hi: ''
     };
 
     const [formData, setFormData] = useState<Question>(initialFormState);
@@ -355,6 +357,17 @@ const Questions: React.FC = () => {
                                                 />
                                             </div>
                                         ))}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Explanation (English)</label>
+                                            <textarea
+                                                name="explanation_en"
+                                                rows={3}
+                                                value={formData.explanation_en || ''}
+                                                onChange={handleChange}
+                                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
+                                                placeholder="Explanation in English..."
+                                            />
+                                        </div>
                                     </div>
 
                                     {/* Hindi Section */}
@@ -383,8 +396,20 @@ const Questions: React.FC = () => {
                                                 />
                                             </div>
                                         ))}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Explanation (Hindi)</label>
+                                            <textarea
+                                                name="explanation_hi"
+                                                rows={3}
+                                                value={formData.explanation_hi || ''}
+                                                onChange={handleChange}
+                                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
+                                                placeholder="Explanation in Hindi..."
+                                            />
+                                        </div>
                                     </div>
                                 </div>
+
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">Tags (Press Enter to add)</label>

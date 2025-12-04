@@ -3,7 +3,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
-import { LayoutDashboard, BookOpen, FileQuestion, LogOut, Menu, X, FileText } from 'lucide-react';
+import { LayoutDashboard, BookOpen, FileQuestion, LogOut, Menu, X, FileText, HelpCircle, Bell } from 'lucide-react';
 import clsx from 'clsx';
 
 const Layout: React.FC = () => {
@@ -29,7 +29,7 @@ const Layout: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
+        <div className="flex h-screen bg-gray-50 overflow-hidden">
             {/* Mobile Sidebar Overlay */}
             {isSidebarOpen && (
                 <div
@@ -40,10 +40,10 @@ const Layout: React.FC = () => {
 
             {/* Sidebar */}
             <aside className={clsx(
-                "fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out",
+                "fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-100 flex-shrink-0 flex flex-col transition-transform duration-200 ease-in-out",
                 isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
             )}>
-                <div className="h-16 flex items-center justify-center border-b px-4">
+                <div className="h-16 flex items-center px-6 border-b border-gray-100">
                     <h1 className="text-xl font-bold text-indigo-600">Config Panel</h1>
                     <button
                         className="ml-auto lg:hidden"
@@ -53,7 +53,7 @@ const Layout: React.FC = () => {
                     </button>
                 </div>
 
-                <nav className="p-4 space-y-2">
+                <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActive = location.pathname === item.path;
@@ -64,7 +64,7 @@ const Layout: React.FC = () => {
                                 className={clsx(
                                     "flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors",
                                     isActive
-                                        ? "bg-indigo-50 text-indigo-600"
+                                        ? "bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600"
                                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                                 )}
                                 onClick={() => setIsSidebarOpen(false)}
@@ -76,15 +76,7 @@ const Layout: React.FC = () => {
                     })}
                 </nav>
 
-                <div className="absolute bottom-0 w-full p-4 border-t bg-white">
-                    <div className="flex items-center space-x-3 mb-4 px-4">
-                        <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold shrink-0">
-                            {user?.email?.[0].toUpperCase()}
-                        </div>
-                        <div className="text-sm overflow-hidden">
-                            <p className="font-medium text-gray-900 truncate">{user?.email}</p>
-                        </div>
-                    </div>
+                <div className="p-4 border-t border-gray-100">
                     <button
                         onClick={handleLogout}
                         className="flex items-center space-x-3 px-4 py-2 w-full text-red-600 hover:bg-red-50 rounded-lg transition-colors"
@@ -95,28 +87,43 @@ const Layout: React.FC = () => {
                 </div>
             </aside>
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-                {/* Mobile Header */}
-                <header className="lg:hidden bg-white shadow-sm h-16 flex items-center justify-between px-4 sticky top-0 z-10">
-                    <div className="flex items-center">
+            {/* Main Content Wrapper */}
+            <div className="flex-1 flex flex-col min-w-0">
+                {/* Top Navigation Bar */}
+                <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 flex-shrink-0">
+                    <div className="flex items-center lg:hidden">
                         <button
                             onClick={() => setIsSidebarOpen(true)}
-                            className="text-gray-500 hover:text-gray-700"
+                            className="text-gray-500 hover:text-gray-700 mr-4"
                         >
                             <Menu className="h-6 w-6" />
                         </button>
-                        <span className="ml-4 font-semibold text-gray-900">Config Panel</span>
                     </div>
-                    <button
-                        onClick={handleLogout}
-                        className="text-gray-500 hover:text-red-600"
-                    >
-                        <LogOut className="h-5 w-5" />
-                    </button>
+
+                    {/* Right Side Icons */}
+                    <div className="ml-auto flex items-center space-x-6">
+                        <button className="text-gray-400 hover:text-gray-600">
+                            <HelpCircle className="h-6 w-6" />
+                        </button>
+                        <button className="text-gray-400 hover:text-gray-600 relative">
+                            <Bell className="h-6 w-6" />
+                            <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
+                        </button>
+
+                        <div className="flex items-center space-x-3 pl-6 border-l border-gray-100">
+                            <div className="text-right hidden md:block">
+                                <p className="text-sm font-medium text-gray-900">{user?.email?.split('@')[0]}</p>
+                                <p className="text-xs text-gray-500">Admin</p>
+                            </div>
+                            <div className="h-9 w-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold border border-indigo-200">
+                                {user?.email?.[0].toUpperCase()}
+                            </div>
+                        </div>
+                    </div>
                 </header>
 
-                <main className="flex-1 overflow-auto p-4 lg:p-8">
+                {/* Scrollable Content Area */}
+                <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
                     <Outlet />
                 </main>
             </div>

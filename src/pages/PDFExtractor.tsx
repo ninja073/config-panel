@@ -95,7 +95,7 @@ const PDFExtractor: React.FC = () => {
 
             // Convert map to final questions
             const finalQuestions: Record<string, Question> = {};
-            Object.entries(questionsMap).forEach(([qNum, q]) => {
+            Object.values(questionsMap).forEach((q) => {
                 if (q.id) {
                     const finalQ = q as Question;
                     // Ensure all required fields are present
